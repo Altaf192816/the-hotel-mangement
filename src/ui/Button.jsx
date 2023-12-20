@@ -48,24 +48,6 @@ const variations = {
   `,
 };
 
-// const Button = styled.button`
-//   border: none;
-//   border-radius: var(--border-radius-sm);
-//   box-shadow: var(--shadow-sm);
-//   ${(props)=>sizes[props.size]}
-//   ${(props)=>variations[props.variation]}
-//   /*
-//   todo--> & is used to select the particular element here button 
-//   */
-//   /* &:hover {
-//     background-color:brown;
-//   } */
-// `;
-// Button.defaultProps = {
-//   variation : "primary",
-//   size : "medium",
-// }
-
 
 const Button = styled.button`
   border: none;

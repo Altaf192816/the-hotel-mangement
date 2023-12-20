@@ -9,7 +9,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId); //checking if we editing or creating cabin
 
@@ -30,7 +30,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const { editCabin, isEditing } = useEditCabin();
 
   function onSubmit(data) {
-    const image = typeof data.image === "string" ? data.image : data.image[0]; //if data.image is string then we simply pass as perameter but a file then we get the first element of  data.image 
+    const image = typeof data.image === "string" ? data.image : data.image[0]; //if data.image is string then we simply pass as perameter but a file then we get the first element of  data.image
 
     if (isEditSession)
       editCabin(
@@ -38,6 +38,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: (data) => {
             // console.log(data);
+            onCloseModal?.();
             reset();
           },
         }
@@ -48,6 +49,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         }
       );
@@ -60,7 +62,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   const isWorking = isCreating || isEditing; //if creating and editing is happening then disbaled all the button
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      $type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label={"Cabin name"} error={errors?.name?.message}>
         <Input
           disabled={isWorking}
@@ -144,7 +149,11 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button $variation="secondary" type="reset">
+        <Button
+          $variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}//using optional chaining because if onCloseModal is not pass to this component in case when form is not used inside the modal
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>

@@ -1,12 +1,10 @@
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import CabinTable from "../features/cabins/CabinTable";
-import Button from "../ui/Button";
-import { useState } from "react";
-import CreateCabinForm from "../features/cabins/CreateCabinForm";
+import AddCabin from "../features/cabins/AddCabin";
+
 
 function Cabins() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
   //todo-->IF data is fetch using useEffect then each time component mount lead to data fething
   // useEffect(function () {
   //   async function fetchCabinData() {
@@ -30,8 +28,7 @@ function Cabins() {
       </Row>
       <Row>
         <CabinTable />
-        <Button onClick={() => setIsFormOpen((is) => !is)}>Add cabin</Button>
-        {isFormOpen && <CreateCabinForm />}
+        <AddCabin/>
       </Row>
     </>
   );
