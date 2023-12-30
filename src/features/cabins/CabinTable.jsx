@@ -1,14 +1,48 @@
 import { useCabins } from "./useCabins";
-import Table from "../../ui/Table";
+import { useSearchParams } from "react-router-dom";
 
+import Table from "../../ui/Table";
 import Spinner from "../../ui/Spinner";
-import CabinRow from "./CabinRow";
 import Menus from "../../ui/Menus";
+import Empty from "../../ui/Empty";
+
+import CabinRow from "./CabinRow";
 
 function CabinTable() {
   const { cabins, isLoading } = useCabins();
-
+  const [searchParams] = useSearchParams();
   if (isLoading) return <Spinner />;
+  if (!cabins.length) return <Empty  resourceName={"Bookings"}/>
+  
+  //1) Filter
+  const filterValue = searchParams.get("discount") || "all";
+
+  let filteredCabins;
+  if (filterValue === "all") filteredCabins = cabins;
+  if (filterValue === "no-discount")
+    filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
+  if (filterValue === "with-discount")
+    filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
+
+  //2) Sort
+  const sortBy = searchParams.get("sortBy") || "name-asc";
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+
+  function compare(a, b) {
+    if (a["name"].toLowerCase() < b["name"].toLowerCase()) {
+      return -1 * modifier;
+    } else if (a["name"].toLowerCase() > b["name"].toLowerCase()) {
+      return 1 * modifier;
+    } else {
+      return 0;
+    }
+  }
+
+  const sortedCabins =
+    field === "name"
+      ? filteredCabins.sort(compare)
+      : filteredCabins.sort((a, b) => (a[field] - b[field]) * modifier);
 
   return (
     <Menus>
@@ -21,7 +55,7 @@ function CabinTable() {
           <div>Discount</div>
         </Table.Header>
         <Table.Body
-          data={cabins}
+          data={sortedCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Table>

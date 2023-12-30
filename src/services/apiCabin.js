@@ -20,8 +20,6 @@ export async function createEditCabin(newCabin, id) {
 
   const imageName = !hasImage && `${Math.random()}-${newCabin.image.name}`.replaceAll("/", "");
 
-  console.log(imageName);
-
   const imagePath = hasImage
     ? newCabin.image
     : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`; //image path should match with image format

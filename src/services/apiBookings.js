@@ -1,5 +1,39 @@
+import toast from "react-hot-toast";
 import { getToday } from "../utils/helpers";
+import { PAGE_SIZE } from "../utils/constant";
 import supabase from "./supabase";
+
+export async function getBookings({ filter, sortBy, page }) {
+  //getting only specific columns
+  let query = supabase.from("bookings").select(
+    "id,created_at,startDate,endDate,numNights,numGuests,status,totalPrice,cabins(name),guests(fullName,email)",
+    { count: "exact" } //to get the length of the array
+  );
+  //Filter
+  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
+  // .eq("status","checked-in");//eq fetch only data that have status equal to checked-in
+
+  //Sorting
+  if (sortBy)
+    query = query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+  
+    //Pagination
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from +  PAGE_SIZE - 1;
+  if (page) query = query.range(from, to);//from = 0 to 9 in first page
+  
+  const { data, error, count } = await query;
+  
+  if (error) {
+    console.log("bookings could not be loaded");
+    toast.error("bookings could not be loaded");
+    throw new Error(error);
+  }
+  
+  return { data, count };
+}
 
 export async function getBooking(id) {
   const { data, error } = await supabase
