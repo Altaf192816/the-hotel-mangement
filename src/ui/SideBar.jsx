@@ -19,8 +19,8 @@ function SideBar() {
     <StyleSidebar>
       <Logo />
       <MainNav />
-
-      <UpLoader />
+        {/*Uploader for uploading fake data*/}
+      {/* <UpLoader /> */}
     </StyleSidebar>
   );
 }

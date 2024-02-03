@@ -8,11 +8,16 @@ import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 import Spinner from "../../ui/Spinner";
+import Empty from "../../ui/Empty";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "./useBooking";
 import { HiArrowDownOnSquare, HiArrowUpOnSquare } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
+import { useCheckedout } from "../check-in-out/useCheckedout";
+import { useDeleteBooking } from "./useDeleteBooking";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -26,8 +31,11 @@ function BookingDetail() {
   const moveBack = useMoveBack();
   const navigate = useNavigate();
 
-  if (isLoading) return <Spinner />;
+  const { checkout, isCheckingout } = useCheckedout();
+  const { deleteBooking, isDeleting } = useDeleteBooking();
 
+  if (isLoading) return <Spinner />;
+  if (!booking) return <Empty resourceName={"booking"} />;
   const { status, id } = booking;
   const statusToTagName = {
     unconfirmed: "blue",
@@ -56,6 +64,33 @@ function BookingDetail() {
             Check in
           </Button>
         )}
+        {status === "checked-in" && (
+          <Button
+            $icon={<HiArrowUpOnSquare />}
+            onClick={() => checkout(id)}
+            disabled={isCheckingout} //!disabled is not present in the Menu.Button
+          >
+            Check out
+          </Button>
+        )}
+        <Modal>
+          <Modal.Open opens={"delete"}>
+            <Button $variation="danger">Delete</Button>
+          </Modal.Open>
+
+          <Modal.Window name={"delete"}>
+            <ConfirmDelete
+              resourceName={"booking"}
+              disabled={isDeleting}
+              onConfirm={() => {
+                deleteBooking(id, {
+                  onSettled: () => navigate(-1), //mutation function is also get access to onSucess,onSettled,onError
+                });
+              }}
+            />
+          </Modal.Window>
+        </Modal>
+
         <Button $variation="secondary" onClick={moveBack}>
           Back
         </Button>

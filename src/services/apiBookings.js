@@ -18,20 +18,20 @@ export async function getBookings({ filter, sortBy, page }) {
     query = query.order(sortBy.field, {
       ascending: sortBy.direction === "asc",
     });
-  
-    //Pagination
+
+  //Pagination
   const from = (page - 1) * PAGE_SIZE;
-  const to = from +  PAGE_SIZE - 1;
-  if (page) query = query.range(from, to);//from = 0 to 9 in first page
-  
+  const to = from + PAGE_SIZE - 1;
+  if (page) query = query.range(from, to); //from = 0 to 9 in first page
+
   const { data, error, count } = await query;
-  
+
   if (error) {
     console.log("bookings could not be loaded");
     toast.error("bookings could not be loaded");
     throw new Error(error);
   }
-  
+
   return { data, count };
 }
 
@@ -50,13 +50,15 @@ export async function getBooking(id) {
   return data;
 }
 
-// Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
-export async function getBookingsAfterDate(date) {
+// Returns all BOOKINGS that are were created after the given date to current date. Useful to get bookings created in the last 30 days, for example.
+//date: ISOString
+export async function getBookingsAfterDateTillToday(date) {
   const { data, error } = await supabase
     .from("bookings")
-    .select("created_at, totalPrice, extrasPrice")
-    .gte("created_at", date)
-    .lte("created_at", getToday({ end: true }));
+    .select("created_at, totalPrice, extrasPrice") //consider today is 8 jan therefore if filter give 7 date = 8 -7= 1 jan
+    .gte("created_at", date) //greater then  1 jan will return
+    .lte("created_at", getToday({ end: true })); //lesser than today(8 jan) will return
+  //therefore we get bookings from 1 jan to 8 jan(included)
 
   if (error) {
     console.error(error);
@@ -67,7 +69,7 @@ export async function getBookingsAfterDate(date) {
 }
 
 // Returns all STAYS that are were created after the given date
-export async function getStaysAfterDate(date) {
+export async function getStaysAfterDateTillToday(date) {
   const { data, error } = await supabase
     .from("bookings")
     // .select('*')

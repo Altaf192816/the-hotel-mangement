@@ -72,7 +72,7 @@ function CabinRow({ cabin }) {
   return (
     <>
       <Table.Row>
-        <Img src={image} />
+        <Img src={image} loading="lazy" />
         <Cabin>{name}</Cabin>
         <div>Fits up to {maxCapacity} guests</div>
         <Price>{formatCurrency(regularPrice)}</Price>
@@ -87,7 +87,11 @@ function CabinRow({ cabin }) {
             <Menus.Menu>
               <Menus.Toggle id={id} />
               <Menus.List id={id}>
-                <Menus.Button icon={<HiClipboard />} onClick={handleCopyCabin}>
+                <Menus.Button
+                  icon={<HiClipboard />}
+                  onClick={handleCopyCabin}
+                  disabled={isCreating}
+                >
                   Duplicate
                 </Menus.Button>
 
@@ -99,6 +103,7 @@ function CabinRow({ cabin }) {
                   <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
                 </Modal.Open>
               </Menus.List>
+
               <Modal.Window name={"edit"}>
                 <CreateCabinForm cabinToEdit={cabin} />
               </Modal.Window>

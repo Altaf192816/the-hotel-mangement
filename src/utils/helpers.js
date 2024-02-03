@@ -12,7 +12,7 @@ export const formatDistanceFromNow = (dateStr) =>
     .replace('about ', '')
     .replace('in', 'In');
 
-// Supabase needs an ISO date string. However, that string will be different on every render because the MS or SEC have changed, which isn't good. So we use this trick to remove any time
+// Supabase needs an ISO date string. However, that string will be different on every render because the MilliSecond or Second have changed, which isn't good. So we use this trick to remove any time
 export const getToday = function (options = {}) {
   const today = new Date();
 
@@ -20,6 +20,7 @@ export const getToday = function (options = {}) {
   if (options?.end)
     // Set to the last second of the day
     today.setUTCHours(23, 59, 59, 999);
+    //Set to get first second of the day
   else today.setUTCHours(0, 0, 0, 0);
   return today.toISOString();
 };

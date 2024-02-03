@@ -83,7 +83,7 @@ function Menus({ children }) {
 function Toggle({ id }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
   function handleClick(e) {
-
+    e.stopPropagation();//we need to stop click event propagation in bubbling phase as when we click on Toggle component clickOutside function also excute 
     const rect = e.target.closest("button").getBoundingClientRect();
     //logic to place the menu on screen
     setPosition({
@@ -101,7 +101,7 @@ function Toggle({ id }) {
 }
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close);
+  const ref = useOutsideClick(close,false);
   if (openId !== id) return null;
 
   return createPortal(
