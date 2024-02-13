@@ -11,6 +11,7 @@ export function useSignup() {
         "Account suceessfully created! Please verify the new account from the user's email address"
       );
     },
+    onError: () => toast.error("Unable to create Account.Please try again😔"),
   });
   return { signup, isLoading };
 }
