@@ -20,7 +20,7 @@ function SideBar() {
       <Logo />
       <MainNav />
         {/*Uploader for uploading fake data*/}
-      {/* <UpLoader /> */}
+      <UpLoader />
     </StyleSidebar>
   );
 }

@@ -46,7 +46,7 @@ const StyleNavLink = styled(NavLink)`
     color: var(--color-brand-600);
   }
 `;
-function MainNav() {
+function  MainNav() {
   return (
     <nav>
       <NavList>

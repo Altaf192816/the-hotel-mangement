@@ -28,7 +28,8 @@ export function useBookings() {
 
   //Server side Pagination
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
-
+  
+  //fetching data according to filtering and sorting
   const {
     isLoading,
     data: { data: bookings, count } = {},
@@ -40,12 +41,14 @@ export function useBookings() {
 
   //Prefetching bookings using prefetchingQuery hook
   const pageCount = Math.ceil(count / PAGE_SIZE);
+
   //prefetching next page
   if (page < pageCount)
     queryClient.prefetchQuery({
       queryKey: ["bookings", filter, sortBy, page + 1],
       queryFn: () => getBookings({ filter, sortBy, page: page + 1 }),
     });
+    
   //prefetching next page
   if (page > 1)
     queryClient.prefetchQuery({
