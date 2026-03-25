@@ -18,9 +18,9 @@ import { createClient } from "@supabase/supabase-js";
 
 // Create a single supabase client for interacting with your database
 //TODO-->Both supabaseUrl and spabaseKey can get from project settings > API
-export const supabaseUrl = "https://nvmlaunuhckcppjewalt.supabase.co";
+export const supabaseUrl = "https://hqxftpfzhpbjkjpvnrxy.supabase.co";
 const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bWxhdW51aGNrY3BwamV3YWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjYyNDQsImV4cCI6MjAxNDg0MjI0NH0.MOUREPUTqZs7U_EyyMuF4yMXPQJyRmx9oW363N0EpX4";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxeGZ0cGZ6aHBiamtqcHZucnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5OTg1NTEsImV4cCI6MjA4NzU3NDU1MX0.cOU7QKXtp0ok947s5_47waRDcdC-o4OnLLJvAkPsogk";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default supabase;
